@@ -20,39 +20,22 @@ namespace KhataBookApi.Controllers
 
         [HttpGet]
         public async Task<IActionResult> GET()
-		{
+        {
             var result = from k in _context.Khata.ToList()
-                         join t in _context.Transactions.ToList() on k.id equals t.kid into transactionsGroup
-                         from tg in transactionsGroup.DefaultIfEmpty()
-                         group tg by new { k.id, k.name, Type = tg.type } into g
-                         select new
-                         {
-                             Id = g.Key.id,
-                             Name = g.Key.name,
-                             Credit = g.Sum(t => t != null && t.type == Models.TransactionType.CREDIT ? t.amount : 0),
-                             Debit = g.Sum(t => t != null && t.type == Models.TransactionType.DEBIT ? t.amount : 0)
-                         };
+                         where k.isDeleted == false && k.isActive == true
+                         select k;
             return Ok(result);
-		}
+        }
+
 
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GET(int id)
         {
             var result = from k in _context.Khata.ToList()
-                         where k.id == id && k.isDeleted == false
-                         join t in _context.Transactions.ToList()
-                         on k.id equals t.kid into transactionsGroup
-                         from tg in transactionsGroup.DefaultIfEmpty()
-                         group tg by new { k.id, k.name, Type = tg.type } into g
-                         select new
-                         {
-                             Id = g.Key.id,
-                             Name = g.Key.name,
-                             Credit = g.Sum(t => t != null && t.type == Models.TransactionType.CREDIT ? t.amount : 0),
-                             Debit = g.Sum(t => t != null && t.type == Models.TransactionType.DEBIT ? t.amount : 0)
-                         };
-            return Ok(result);
+                         where k.isDeleted == false && k.isActive == true && k.id==id
+                         select k;
+            return Ok(result.FirstOrDefault());
         }
 
         [HttpPost]
@@ -60,7 +43,7 @@ namespace KhataBookApi.Controllers
         {
             _context.Khata.Add(model);
             _context.SaveChanges();
-            return Ok();
+            return Ok(model);
         }
 
 
@@ -68,12 +51,10 @@ namespace KhataBookApi.Controllers
         [HttpPut]
         public async Task<IActionResult> Update(Khata model)
         {
-            var res=_context.Khata.Find(model);
-            res.name = model.name;
-            res.updatedon = DateTime.UtcNow;
-            _context.Khata.Update(res);
+            model.updatedon = DateTime.UtcNow;
+            _context.Khata.Update(model);
             _context.SaveChanges();
-            return Ok();
+            return Ok(model);
         }
 
 
