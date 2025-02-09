@@ -1,28 +1,26 @@
 ﻿using System;
 using KhataBookApi.Data;
 using KhataBookApi.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KhataBookApi.Controllers
 {
 	[ApiController]
     [Route("api/[controller]")]
-    public class KhataController:ControllerBase
+    public class KhataController:BaseController
 	{
 
-        private readonly ApplicationDbContext _context;
-
-
-        public KhataController(ApplicationDbContext _context)
+        public KhataController(ApplicationDbContext _context):base(_context)
         {
-            this._context = _context;
+
         }
 
         [HttpGet]
         public async Task<IActionResult> GET()
         {
             var result = from k in _context.Khata.ToList()
-                         where k.isDeleted == false && k.isActive == true
+                         where k.isDeleted == false && k.isActive == true && k.userid == _user.id
                          select k;
             return Ok(result);
         }
@@ -33,7 +31,7 @@ namespace KhataBookApi.Controllers
         public async Task<IActionResult> GET(int id)
         {
             var result = from k in _context.Khata.ToList()
-                         where k.isDeleted == false && k.isActive == true && k.id==id
+                         where k.isDeleted == false && k.isActive == true && k.id==id && k.userid == _user.id
                          select k;
             return Ok(result.FirstOrDefault());
         }
@@ -41,6 +39,7 @@ namespace KhataBookApi.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(Khata model)
         {
+            model.userid = _user.id;
             _context.Khata.Add(model);
             _context.SaveChanges();
             return Ok(model);
@@ -51,6 +50,7 @@ namespace KhataBookApi.Controllers
         [HttpPut]
         public async Task<IActionResult> Update(Khata model)
         {
+            model.userid = _user.id;
             model.updatedon = DateTime.UtcNow;
             _context.Khata.Update(model);
             _context.SaveChanges();

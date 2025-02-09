@@ -3,6 +3,7 @@ using System;
 using KhataBookApi.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KhataBookApi.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250207095843_users")]
+    partial class users
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.16");
@@ -44,9 +47,6 @@ namespace KhataBookApi.Data.Migrations
 
                     b.Property<DateTime?>("updatedon")
                         .HasColumnType("TEXT");
-
-                    b.Property<int>("userid")
-                        .HasColumnType("INTEGER");
 
                     b.HasKey("id");
 
@@ -95,14 +95,6 @@ namespace KhataBookApi.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Firstname")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Lastname")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<DateTime>("cretedon")
                         .HasColumnType("TEXT");
 
@@ -115,6 +107,10 @@ namespace KhataBookApi.Data.Migrations
 
                     b.Property<bool>("isDeleted")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("password")
                         .IsRequired()

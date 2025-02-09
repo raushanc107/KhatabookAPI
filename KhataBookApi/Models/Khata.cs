@@ -6,6 +6,7 @@ namespace KhataBookApi.Models
 	public class Khata :BaseModel
 	{
 
+        public int userid { get; set; }
 		public string name { get; set; }
 
         

@@ -1,20 +1,28 @@
-﻿using KhataBookApi.Data;
+﻿using System.Security.Cryptography;
+using KhataBookApi.Data;
 using KhataBookApi.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KhataBookApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class TransactionController : ControllerBase
+    public class TransactionController : BaseController
     {
-        private readonly ApplicationDbContext _context;
-
-        public TransactionController(ApplicationDbContext context)
+        
+        public TransactionController(ApplicationDbContext context):base(context)
         {
-            _context = context;
         }
 
+        [HttpGet]
+        public IActionResult Get()
+        {
+            var result = from e in _context.Transactions.ToList()
+                         where e.isDeleted == false && e.isActive == true
+                         select e;
+            return Ok(result);
+        }
 
         [HttpGet("{kid}")]
         public IActionResult Get(int kid) { 

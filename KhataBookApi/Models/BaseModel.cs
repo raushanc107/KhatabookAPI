@@ -16,5 +16,15 @@ namespace KhataBookApi.Models
 
 		public bool isDeleted { get; set; } = false;
 	}
+
+    public class SwaggerOptions
+    {
+        public string? JsonURL { get; set; }
+        public string? Name { get; set; }
+        public string? Version { get; set; }
+        public string? Description { get; set; }
+
+        public string? Title { get; set; }
+    }
 }
 

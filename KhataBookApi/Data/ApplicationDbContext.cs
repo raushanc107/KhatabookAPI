@@ -14,6 +14,7 @@ public class ApplicationDbContext : IdentityDbContext
     public DbSet<Khata> Khata { get; set; }
 
     public DbSet<Transactions> Transactions {get;set;}
+    public DbSet<Users> Users {get;set;}
 
 }
 
