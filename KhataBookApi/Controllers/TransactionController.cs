@@ -58,7 +58,7 @@ namespace KhataBookApi.Controllers
         }
 
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public IActionResult Delete(int id) { 
             var model=_context.Transactions.ToList().Find(e => e.id==id);
             model.isDeleted = true;
