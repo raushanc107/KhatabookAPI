@@ -3,8 +3,8 @@ namespace KhataBookApi.Models
 {
 	public enum TransactionType
 	{
-		CREDIT,
-		DEBIT
+		CREDIT=1,
+		DEBIT=2
 	}
 }
 

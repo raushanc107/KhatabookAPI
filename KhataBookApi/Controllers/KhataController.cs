@@ -19,9 +19,44 @@ namespace KhataBookApi.Controllers
         [HttpGet]
         public async Task<IActionResult> GET()
         {
-            var result = from k in _context.Khata.ToList()
-                         where k.isDeleted == false && k.isActive == true && k.userid == _user.id
-                         select k;
+
+            //var result = from k in _context.Khata.ToList()
+            //             where k.isDeleted == false && k.isActive == true && k.userid == _user.id
+            //             select k;
+            var result = (from k in _context.Khata
+                          join t in _context.Transactions on k.id equals t.kid into transactionGroup
+                          from t in transactionGroup.DefaultIfEmpty() // Left Join Effect
+                          where k.userid == _user.id && k.isActive && !k.isDeleted
+                          group t by new
+                          {
+                              k.id,
+                              k.name,
+                              k.email,
+                              k.contactnumber,
+                              k.cretedon,
+                              k.updatedon,
+                              k.isActive,
+                              k.isDeleted,
+                              k.userid
+                          } into g
+                          select new
+                          {
+                              g.Key.id,
+                              g.Key.name,
+                              g.Key.email,
+                              g.Key.contactnumber,
+                              g.Key.cretedon,
+                              g.Key.updatedon,
+                              g.Key.isActive,
+                              g.Key.isDeleted,
+                              g.Key.userid,
+                              Credit = g.Where(x => x != null && x.isActive && !x.isDeleted && x.type == TransactionType.CREDIT)
+                                        .Sum(x => (double?)x.amount) ?? 0,
+                              Debit = g.Where(x => x != null && x.isActive && !x.isDeleted && x.type == TransactionType.DEBIT)
+                                        .Sum(x => (double?)x.amount) ?? 0
+                          }).ToList();
+
+
             return Ok(result);
         }
 
@@ -58,7 +93,7 @@ namespace KhataBookApi.Controllers
         }
 
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             var res = _context.Khata.Find(id);
