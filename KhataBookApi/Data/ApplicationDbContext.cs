@@ -15,6 +15,9 @@ public class ApplicationDbContext : IdentityDbContext
 
     public DbSet<Transactions> Transactions {get;set;}
     public DbSet<Users> Users {get;set;}
+    public DbSet<Cars> Cars {get;set;}
+    public DbSet<City> City {get;set;}
+    public DbSet<RentalDetails> RentDetails {get;set;}
 
 }
 

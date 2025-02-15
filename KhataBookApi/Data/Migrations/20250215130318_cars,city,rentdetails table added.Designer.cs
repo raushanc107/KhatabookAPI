@@ -3,6 +3,7 @@ using System;
 using KhataBookApi.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KhataBookApi.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250215130318_cars,city,rentdetails table added")]
+    partial class carscityrentdetailstableadded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.16");
@@ -43,10 +46,6 @@ namespace KhataBookApi.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("fuelType")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("imageURL")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -148,8 +147,9 @@ namespace KhataBookApi.Data.Migrations
                     b.Property<int>("carid")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("cityId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("cityId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("cretedon")
                         .HasColumnType("TEXT");
