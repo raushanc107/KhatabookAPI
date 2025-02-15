@@ -22,7 +22,7 @@ namespace KhataBookApi.Controllers
             var result = from c in _context.Cars
                          join rd in _context.RentDetails on c.id equals rd.carid
                          join ct in _context.City on rd.cityId equals ct.id
-                         where !c.isDeleted && c.isActive && !ct.isActive && ct.isActive && ct.isActive && !ct.isActive
+                         where !c.isDeleted && c.isActive && !ct.isDeleted && ct.isActive && rd.isActive && !rd.isDeleted
                          select new
                          {
                             carId=c.id,
@@ -52,7 +52,7 @@ namespace KhataBookApi.Controllers
             var result = from c in _context.Cars
                          join rd in _context.RentDetails on c.id equals rd.carid
                          join ct in _context.City on rd.cityId equals ct.id
-                         where !c.isDeleted && c.isActive && !ct.isActive && ct.isActive && ct.isActive && !ct.isActive && ct.id==cityid
+                         where !c.isDeleted && c.isActive && !ct.isDeleted && ct.isActive && rd.isActive && !rd.isDeleted && ct.id==cityid
                          select new
                          {
                              carId = c.id,
@@ -83,7 +83,7 @@ namespace KhataBookApi.Controllers
             var result = (from c in _context.Cars
                          join rd in _context.RentDetails on c.id equals rd.carid
                          join ct in _context.City on rd.cityId equals ct.id
-                         where !c.isDeleted && c.isActive && !ct.isActive && ct.isActive && ct.isActive && !ct.isActive && c.id== carid && ct.id==cityid
+                         where !c.isDeleted && c.isActive && !ct.isDeleted && ct.isActive && rd.isActive && !rd.isDeleted && c.id== carid && ct.id==cityid
                          select new
                          {
                              carId = c.id,
