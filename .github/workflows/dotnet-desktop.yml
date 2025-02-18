@@ -1,0 +1,70 @@
+name: Deploy to Windows VPS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: windows-latest
+
+    steps:
+    # Step 1: Checkout the repository
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    # Step 2: Set up .NET environment
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '7.x' # Update this to match your project's version
+
+    # Step 3: Restore dependencies
+    - name: Restore Dependencies
+      run: dotnet restore
+
+    # Step 4: Build the project
+    - name: Build Project
+      run: dotnet publish -c Release -o ./publish
+
+    - name: Debug Local Publish Directory
+      run: dir ./publish
+
+    # Step 5: Deploy to Windows VPS
+    - name: Deploy to Windows VPS
+      shell: pwsh
+      run: |
+        # Configure TrustedHosts (temporary for the session)
+        Set-Item WSMan:\localhost\Client\TrustedHosts -Value ${{ secrets.VPS_HOST }} -Force
+    
+        # Create a secure password and credential
+        $password = ConvertTo-SecureString "${{ secrets.VPS_PASSWORD }}" -AsPlainText -Force
+        $credential = New-Object System.Management.Automation.PSCredential("${{ secrets.VPS_USERNAME }}", $password)
+    
+        # Establish a new session
+        $session = New-PSSession -ComputerName ${{ secrets.VPS_HOST }} -Credential $credential
+
+        # Stop the IIS application pool (replace 'YourAppPoolName' with the actual app pool name)
+        # Start the IIS application pool for maintenance
+        Invoke-Command -Session $session -ScriptBlock {
+          Stop-WebAppPool -Name ${{ secrets.VPS_APP_POOL }}
+          Stop-Website -Name ${{ secrets.VPS_APP_SITE }}
+        }
+        
+
+        # Copy files to the remote machine
+        Copy-Item -Path ./publish/* -Destination ${{ secrets.VPS_PUBLISH_DIR }} -ToSession $session -Recurse -Force
+
+        # Stop the IIS application pool for maintenance
+        # Start the IIS application pool
+        Invoke-Command -Session $session -ScriptBlock {
+          Start-WebAppPool -Name ${{ secrets.VPS_APP_POOL }}
+          Start-Website -Name ${{ secrets.VPS_APP_SITE }}
+        }
+        
+
+        # Clean up the session
+        Remove-PSSession $session
+      continue-on-error: false
+
