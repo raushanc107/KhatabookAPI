@@ -14,6 +14,7 @@ namespace KhataBookApi.Controllers
         public CarController(ApplicationDbContext context)
         {
             _context = context;
+            
         }
         
         [HttpGet]

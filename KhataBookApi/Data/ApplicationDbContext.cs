@@ -18,6 +18,7 @@ public class ApplicationDbContext : IdentityDbContext
     public DbSet<Cars> Cars {get;set;}
     public DbSet<City> City {get;set;}
     public DbSet<RentalDetails> RentDetails {get;set;}
+    public DbSet<Booking> Booking {get;set;}
 
 }
 
