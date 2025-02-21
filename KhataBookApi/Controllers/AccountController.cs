@@ -33,7 +33,7 @@ namespace KhataBookApi.Controllers
 
                  
 
-                if (_context.Users.Where(E=>E.email==request.Email).Any())
+                if (_context.Users.Where(E=>E.email.ToLower()==request.Email.ToLower()).Any())
                 {
                     return BadRequest("Username already exists.");
                 }
@@ -71,7 +71,7 @@ namespace KhataBookApi.Controllers
 
                     return BadRequest(new { Message = "Validation Failed", Errors = errors });
                 }
-                var user = _context.Users.Where(E => E.email == request.Email).FirstOrDefault();
+                var user = _context.Users.Where(E => E.email.ToLower() == request.Email.ToLower()).FirstOrDefault();
                 if (user == null || !HashingRepo.veriVerifyPassword(request.Password, user.password))
                 {
                     return Unauthorized("Invalid credentials.");

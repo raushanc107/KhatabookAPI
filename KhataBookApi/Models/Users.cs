@@ -25,9 +25,7 @@ namespace KhataBookApi.Models
         public string lastname { get; set; }
 
         [Required(ErrorMessage = "Password is required")]
-        [StringLength(100, ErrorMessage = "Password must be between 8 and 100 characters", MinimumLength = 8)]
-        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#]).{8,}$",
-            ErrorMessage = "Password must have at least one uppercase letter, one lowercase letter, one number, and one special character")]
+        [StringLength(100, ErrorMessage = "Password must be between 8 and 100 characters", MinimumLength = 6)]
         public string Password { get; set; }
 
         [Required(ErrorMessage = "Confirm password is required")]
