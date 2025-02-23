@@ -21,15 +21,17 @@ namespace KhataBookApi.Controllers
                 var res = from b in _context.Booking
                           join c in _context.Cars on b.carid equals c.id
                           join ct in _context.City on b.cityid equals ct.id
+                          join u in _context.Users on b.userid equals u.id
                           select new
                           {
                               id = b.id,
                               userid = b.userid,
+                              useremail=u.email,
                               car = c,
                               city = ct,
                               subscriptiontenure = b.subscriptiontenure,
                               monthlyFees = b.monthlyFees,
-                              taxPercentage = b.monthlyFees,
+                              taxPercentage = b.taxPercentage,
                               taxAmount = b.taxAmount,
                               bookingCharge = b.bookingCharge,
                               processingFees = b.processingFees,
@@ -49,11 +51,12 @@ namespace KhataBookApi.Controllers
                       {
                           id = b.id,
                           userid = b.userid,
+                          useremail = _user.email,
                           car = c,
                           city = ct,
                           subscriptiontenure = b.subscriptiontenure,
                           monthlyFees = b.monthlyFees,
-                          taxPercentage = b.monthlyFees,
+                          taxPercentage = b.taxPercentage,
                           taxAmount = b.taxAmount,
                           bookingCharge = b.bookingCharge,
                           processingFees = b.processingFees,
@@ -75,16 +78,18 @@ namespace KhataBookApi.Controllers
                 var res = from b in _context.Booking
                            join c in _context.Cars on b.carid equals c.id
                            join ct in _context.City on b.cityid equals ct.id
+                           join u in _context.Users on b.userid equals u.id
                            where b.id == bookingId
                            select new
                            {
                                id = b.id,
                                userid = b.userid,
+                               useremail = u.email,
                                car = c,
                                city = ct,
                                subscriptiontenure = b.subscriptiontenure,
                                monthlyFees = b.monthlyFees,
-                               taxPercentage = b.monthlyFees,
+                               taxPercentage = b.taxPercentage,
                                taxAmount = b.taxAmount,
                                bookingCharge = b.bookingCharge,
                                processingFees = b.processingFees,
@@ -104,11 +109,12 @@ namespace KhataBookApi.Controllers
                       {
                           id = b.id,
                           userid = b.userid,
+                          useremail=_user.email,
                           car = c,
                           city = ct,
                           subscriptiontenure = b.subscriptiontenure,
                           monthlyFees = b.monthlyFees,
-                          taxPercentage = b.monthlyFees,
+                          taxPercentage = b.taxPercentage,
                           taxAmount = b.taxAmount,
                           bookingCharge = b.bookingCharge,
                           processingFees = b.processingFees,
@@ -134,11 +140,12 @@ namespace KhataBookApi.Controllers
                       {
                           id = b.id,
                           userid = b.userid,
+                          useremail = u.email,
                           car = c,
                           city = ct,
                           subscriptiontenure = b.subscriptiontenure,
                           monthlyFees = b.monthlyFees,
-                          taxPercentage = b.monthlyFees,
+                          taxPercentage = b.taxPercentage,
                           taxAmount = b.taxAmount,
                           bookingCharge = b.bookingCharge,
                           processingFees = b.processingFees,
@@ -167,11 +174,12 @@ namespace KhataBookApi.Controllers
             {
                 id = b.id,
                 userid = b.userid,
+                useremail = _user.email,
                 car = c,
                 city = ct,
                 subscriptiontenure = b.subscriptiontenure,
                 monthlyFees = b.monthlyFees,
-                taxPercentage = b.monthlyFees,
+                taxPercentage = b.taxPercentage,
                 taxAmount = b.taxAmount,
                 bookingCharge = b.bookingCharge,
                 processingFees = b.processingFees,
