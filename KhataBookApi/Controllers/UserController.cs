@@ -37,7 +37,7 @@ namespace KhataBookApi.Controllers
             {
                 return BadRequest("user does not exist");
             }
-            user.isActive = false;
+            user.isActive = !user.isActive;
             await _context.SaveChangesAsync();
             return Ok(user);
         }
